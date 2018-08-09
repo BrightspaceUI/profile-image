@@ -13,25 +13,124 @@ D2L Profile Image
 
 <dom-module id="d2l-profile-image">
 	<template strip-whitespace>
+
 		<style include="d2l-profile-image-shared-styles">
-			.shady-person {
-				--d2l-icon-fill-color: var(--d2l-color-ferrite);
-			}
-			@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-				.shady-person{
-						width: 100%;
-						height: 100%;
+				.initials {
+					background-color: black;
+					color: var(--d2l-color-regolith);
+					width: 100%;
+					height: 100%;
+					text-align: center;
+					display : flex;
+					align-items : center;
+					justify-content: center;
 				}
-			}
-		</style>
-		<div class="shady-person">
-			<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
-		</div>
+				.shady-person {
+					--d2l-icon-fill-color: var(--d2l-color-ferrite);
+				}
+				@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+					.shady-person{
+							width: 100%;
+							height: 100%;
+					}
+				}
+			</style>
+		</custom-style>
+		<template is="dom-if" if="[[_showShadyPerson(firstName, colourId)]]">
+			<div class="shady-person">
+				<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
+			</div>
+		</template>
+
+		<template is="dom-if" if="[[_showInitials(firstName, colourId)]]">
+			<div id="initials" class="initials">
+				[[_getInitials(firstName, lastName)]]
+			</div>
+		</template>
+
 	</template>
 	<script>
 		Polymer({
 			is: 'd2l-profile-image',
 			properties: {
+				firstName: {
+					type: String,
+					value: ''
+				},
+				lastName: {
+					type: String,
+					value: ''
+				},
+				colourId: {
+					type: Number,
+					value: -1
+				},
+				// WARNING
+				// Changing the order, as well as adding or removing a colour
+				// May result in background colours to change for a given colourId
+				// Only update if you have the correct approval
+				_BgColours: {
+					type: Array,
+					value: [
+						'#8B271F',
+						'#CF3A2F',
+						'#C74F05',
+						'#527F1F',
+						'#346633',
+						'#165F5B',
+						'#1F826B',
+						'#0C7683',
+						'#3155BF',
+						'#4476C1',
+						'#383773',
+						'#6F6BB8',
+						'#50305F',
+						'#9860AF',
+						'#804167',
+						'#AB578A',
+						'#8C2855',
+						'#D13B7F',
+						'#47565E',
+						'#5F727D',
+						'#3B4148',
+						'#59616C'
+					],
+					readOnly: true
+				}
+			},
+			attached: function() {
+				this.async(function() {
+					var initials = Polymer.dom(this.root).querySelector('#initials');
+					if (initials) {
+						var backgroundColour = this._getInitialedBackgroundColour(this.colourId);
+						initials.setAttribute('style', 'background-color: ' + backgroundColour + ';');
+					}
+				}.bind(this));
+			},
+			_getInitialedBackgroundColour: function(colourId) {
+				var idx = colourId % this._BgColours.length;
+				return this._BgColours[idx];
+			},
+			_getInitials: function(firstName, lastName) {
+				if (firstName && lastName) {
+					return firstName[0].toUpperCase() + lastName[0].toUpperCase();
+				}
+				else if (firstName) {
+					return firstName[0].toUpperCase();
+				}
+				return '';
+			},
+			_showShadyPerson: function(firstName, colourId) {
+				return !this._showInitials(firstName, colourId);
+			},
+			_showInitials: function(firstName, colourId) {
+				if (typeof colourId === 'undefined' || colourId === null) {
+					return false;
+				}
+				else if (colourId < 0 || !firstName) {
+					return false;
+				}
+				return true;
 			}
 		});
 	</script>
