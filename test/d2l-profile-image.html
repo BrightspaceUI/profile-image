@@ -64,33 +64,45 @@
 				});
 
 				[
-					{ firstName:'first', lastName: 'last', expectedInitials: 'FL', colourId: 10, valid: true },
-					{ firstName:'First', lastName: 'Last', expectedInitials: 'FL', colourId: 10, valid: true },
-					{ firstName: undefined, lastName: 'last', expectedInitials: '', colourId: 10, valid: false },
-					{ firstName: 'first', lastName: undefined, expectedInitials: 'F', colourId: 1, valid: true },
-					{ firstName: undefined, lastName: undefined, expectedInitials: '', colourId: 1, valid: false },
-					{ firstName: null, lastName: 'last', expectedInitials: '', colourId: 1, valid: false },
-					{ firstName: 'first', lastName: null, expectedInitials: 'F', colourId: 420, valid: true },
-					{ firstName: null, lastName: null, expectedInitials: '', colourId: 420, valid: false },
-					{ firstName: '', lastName: 'last', expectedInitials: '', colourId: 420, valid: false },
-					{ firstName: 'first', lastName: '', expectedInitials: 'F', colourId: 0, valid: true },
-					{ firstName: '', lastName: '', expectedInitials: '', userId: 0, valid: false },
-					{ firstName: 'first', lastName: 'last', expectedInitials: 'FL', colourId: null, valid: false },
-					{ firstName: 'first', lastName: 'last', expectedInitials: 'FL', colourId: -1, valid: false },
-					{ firstName: 'first', lastName: 'last', expectedInitials: 'FL', colourId: undefined, valid: false },
+					{ firstName:'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: 10, valid: true },
+					{ firstName:'First', lastName: 'Last', failedToLoadImage: false, expectedInitials: 'FL', colourId: 10, valid: true },
+					{ firstName: undefined, lastName: 'last', failedToLoadImage: false, expectedInitials: '', colourId: 10, valid: false },
+					{ firstName: 'first', lastName: undefined, failedToLoadImage: false, expectedInitials: 'F', colourId: 1, valid: true },
+					{ firstName: undefined, lastName: undefined, failedToLoadImage: false, expectedInitials: '', colourId: 1, valid: false },
+					{ firstName: null, lastName: 'last', failedToLoadImage: false, expectedInitials: '', colourId: 1, valid: false },
+					{ firstName: 'first', lastName: null, failedToLoadImage: false, expectedInitials: 'F', colourId: 420, valid: true },
+					{ firstName: null, lastName: null, failedToLoadImage: false, expectedInitials: '', colourId: 420, valid: false },
+					{ firstName: '', lastName: 'last', failedToLoadImage: false, expectedInitials: '', colourId: 420, valid: false },
+					{ firstName: 'first', lastName: '', failedToLoadImage: false, expectedInitials: 'F', colourId: 0, valid: true },
+					{ firstName: '', lastName: '', failedToLoadImage: false, expectedInitials: '', userId: 0, valid: false },
+					{ firstName: 'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: null, valid: false },
+					{ firstName: 'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: -1, valid: false },
+					{ firstName: 'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: undefined, valid: false },
 
 				].forEach(function(t) {
 					test('_getInitials(' + t.firstName + ',' + t.lastName + ') should return ' + t.expectedInitials, function() {
 						var initials = defaultElement._getInitials(t.firstName, t.lastName);
 						assert.equal(initials, t.expectedInitials);
 					});
-					test('_showInitials(' + t.firstName + ',' + t.colourId + ') should return ' + t.valid, function() {
-						var initialsValid = defaultElement._showInitials(t.firstName, t.colourId);
+					test('_showInitials(' + t.firstName + ',' + t.colourId + ',' + t.failedToLoadImage + ') should return ' + t.valid, function() {
+						var initialsValid = defaultElement._showInitials(t.firstName, t.colourId, t.failedToLoadImage);
 						assert.equal(initialsValid, t.valid);
 					});
-					test('_showShadyPerson(' + t.firstName + ',' + t.colourId + ') should return ' + !t.valid, function() {
-						var initialsInvalid = defaultElement._showShadyPerson(t.firstName, t.colourId);
+					test('_showShadyPerson(' + t.firstName + ',' + t.colourId + ',' + t.failedToLoadImage + ') should return ' + !t.valid, function() {
+						var initialsInvalid = defaultElement._showShadyPerson(t.firstName, t.colourId, t.failedToLoadImage);
 						assert.equal(initialsInvalid, !t.valid);
+					});
+				});
+
+				[
+					{ imageUrl:'url', failedToLoadImage: false, showAvatar: true },
+					{ imageUrl:'url', failedToLoadImage: true, showAvatar: false },
+					{ imageUrl:'', failedToLoadImage: true, showAvatar: false },
+					{ imageUrl:'', failedToLoadImage: true, showAvatar: false }
+				].forEach(function(t) {
+					test('_showAvatar(' + t.imageUrl + ',' + t.failedToLoadImage + ') should return ' + t.showAvatar, function() {
+						var showAvatar = defaultElement._showAvatar(t.imageUrl, t.failedToLoadImage);
+						assert.equal(showAvatar, t.showAvatar);
 					});
 				});
 
