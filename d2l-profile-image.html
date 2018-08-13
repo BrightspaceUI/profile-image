@@ -15,42 +15,31 @@ D2L Profile Image
 		<style>
 			:host {
 				display: none;
+				width: var(--size);
+				height: var(--size);
+				--d2l-icon-height: var(--size);
+				--d2l-icon-width: var(--size);
+				overflow: hidden;
 			}
 			:host([small]) {
 				display: inline-block;
-				width: 30px;
-				height: 30px;
-				--d2l-icon-height: 30px;
-				--d2l-icon-width: 30px;
+				--size: 30px;
 				border-radius: 4px;
-				overflow: hidden;
 			}
 			:host([medium]) {
 				display: inline-block;
-				width: 42px;
-				height: 42px;
-				--d2l-icon-height: 42px;
-				--d2l-icon-width: 42px;
+				--size: 42px;
 				border-radius: 6px;
-				overflow: hidden;
 			}
 			:host([large]) {
 				display: inline-block;
-				width: 60px;
-				height: 60px;
-				--d2l-icon-height: 60px;
-				--d2l-icon-width: 60px;
+				--size: 60px;
 				border-radius: 8px;
-				overflow: hidden;
 			}
 			:host([x-large]) {
 				display: inline-block;
-				width: 84px;
-				height: 84px;
-				--d2l-icon-height: 84px;
-				--d2l-icon-width: 84px;
+				--size: 84px;
 				border-radius: 8px;
-				overflow: hidden;
 			}
 			.shady-person {
 				--d2l-icon-fill-color: var(--d2l-color-ferrite);
