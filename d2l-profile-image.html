@@ -1,4 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-colors/d2l-colors.html">
+<link rel="import" href="../d2l-icons/d2l-icon.html">
+<link rel="import" href="../d2l-icons/tier3-icons.html">
+
 
 <!--
 `d2l-profile-image`
@@ -10,19 +14,45 @@ D2L Profile Image
 	<template strip-whitespace>
 		<style>
 			:host {
+				display: none;
+				width: var(--size);
+				height: var(--size);
+				--d2l-icon-height: var(--size);
+				--d2l-icon-width: var(--size);
+				overflow: hidden;
+			}
+			:host([small]) {
 				display: inline-block;
+				--size: 30px;
+				border-radius: 4px;
+			}
+			:host([medium]) {
+				display: inline-block;
+				--size: 42px;
+				border-radius: 6px;
+			}
+			:host([large]) {
+				display: inline-block;
+				--size: 60px;
+				border-radius: 8px;
+			}
+			:host([x-large]) {
+				display: inline-block;
+				--size: 84px;
+				border-radius: 8px;
+			}
+			.shady-person {
+				--d2l-icon-fill-color: var(--d2l-color-ferrite);
 			}
 		</style>
-		<h2>Hello [[prop1]]!</h2>
+		<div class="shady-person">
+			<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
+		</div>
 	</template>
 	<script>
 		Polymer({
 			is: 'd2l-profile-image',
 			properties: {
-				prop1: {
-					type: String,
-					value: 'd2l-profile-image',
-				}
 			}
 		});
 	</script>

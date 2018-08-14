@@ -9,17 +9,53 @@
 		<link rel="import" href="../d2l-profile-image.html">
 	</head>
 	<body>
-		<test-fixture id="basic">
+		<test-fixture id="d2l-profile-image-fixture-small">
 			<template>
-				<d2l-profile-image></d2l-profile-image>
+				<d2l-profile-image small></d2l-profile-image>
+			</template>
+		</test-fixture>
+		<test-fixture id="d2l-profile-image-fixture-medium">
+			<template>
+				<d2l-profile-image medium></d2l-profile-image>
+			</template>
+		</test-fixture>
+		<test-fixture id="d2l-profile-image-fixture-large">
+			<template>
+				<d2l-profile-image large></d2l-profile-image>
+			</template>
+		</test-fixture>
+		<test-fixture id="d2l-profile-image-fixture-x-large">
+			<template>
+				<d2l-profile-image x-large></d2l-profile-image>
 			</template>
 		</test-fixture>
 		<script>
 			suite('d2l-profile-image', function() {
-				test('instantiating the element works', function() {
-					var element = fixture('basic');
-					assert.equal(element.is, 'd2l-profile-image');
+
+				var sizes = ['small', 'medium', 'large', 'x-large'];
+				var elements = {};
+
+				setup(function() {
+					sizes.forEach(function(size) {
+						elements[size] = fixture('d2l-profile-image-fixture-' + size);
+					});
 				});
+
+				// Specification can be found at
+				// http://design.d2l/components/profile-images/
+				[
+					{ size:'small', expectedLength: 30 },
+					{ size:'medium', expectedLength: 42 },
+					{ size:'large', expectedLength: 60 },
+					{ size:'x-large', expectedLength: 84 },
+				].forEach(function(testCase) {
+					test(testCase.size + ' profile image is sized according to spec', function() {
+						var element = elements[testCase.size];
+						assert.equal(element.offsetWidth, testCase.expectedLength);
+						assert.equal(element.offsetHeight, testCase.expectedLength);
+					});
+				});
+
 			});
 		</script>
 	</body>
