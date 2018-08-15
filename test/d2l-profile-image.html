@@ -64,45 +64,60 @@
 				});
 
 				[
-					{ firstName:'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: 10, valid: true },
-					{ firstName:'First', lastName: 'Last', failedToLoadImage: false, expectedInitials: 'FL', colourId: 10, valid: true },
-					{ firstName: undefined, lastName: 'last', failedToLoadImage: false, expectedInitials: '', colourId: 10, valid: false },
-					{ firstName: 'first', lastName: undefined, failedToLoadImage: false, expectedInitials: 'F', colourId: 1, valid: true },
-					{ firstName: undefined, lastName: undefined, failedToLoadImage: false, expectedInitials: '', colourId: 1, valid: false },
-					{ firstName: null, lastName: 'last', failedToLoadImage: false, expectedInitials: '', colourId: 1, valid: false },
-					{ firstName: 'first', lastName: null, failedToLoadImage: false, expectedInitials: 'F', colourId: 420, valid: true },
-					{ firstName: null, lastName: null, failedToLoadImage: false, expectedInitials: '', colourId: 420, valid: false },
-					{ firstName: '', lastName: 'last', failedToLoadImage: false, expectedInitials: '', colourId: 420, valid: false },
-					{ firstName: 'first', lastName: '', failedToLoadImage: false, expectedInitials: 'F', colourId: 0, valid: true },
-					{ firstName: '', lastName: '', failedToLoadImage: false, expectedInitials: '', userId: 0, valid: false },
-					{ firstName: 'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: null, valid: false },
-					{ firstName: 'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: -1, valid: false },
-					{ firstName: 'first', lastName: 'last', failedToLoadImage: false, expectedInitials: 'FL', colourId: undefined, valid: false },
-
+					{ firstName: 'First', lastName: 'Last', expectedInitials: 'FL'},
+					{ firstName: 'first', lastName: 'last', expectedInitials: 'FL' },
+					{ firstName: 'first', lastName: undefined, expectedInitials: 'F' },
+					{ firstName: 'first', lastName: null, expectedInitials: 'F' },
+					{ firstName: 'first', lastName: '', expectedInitials: 'F' },
+					{ firstName: '', lastName: 'last', expectedInitials: '' },
+					{ firstName: undefined, lastName: 'last', expectedInitials: '' },
+					{ firstName: null, lastName: 'last', expectedInitials: '' },
 				].forEach(function(t) {
 					test('_getInitials(' + t.firstName + ',' + t.lastName + ') should return ' + t.expectedInitials, function() {
 						var initials = defaultElement._getInitials(t.firstName, t.lastName);
 						assert.equal(initials, t.expectedInitials);
 					});
-					test('_showInitials(' + t.firstName + ',' + t.colourId + ',' + t.failedToLoadImage + ') should return ' + t.valid, function() {
-						var initialsValid = defaultElement._showInitials(t.firstName, t.colourId, t.failedToLoadImage);
-						assert.equal(initialsValid, t.valid);
-					});
-					test('_showShadyPerson(' + t.firstName + ',' + t.colourId + ',' + t.failedToLoadImage + ') should return ' + !t.valid, function() {
-						var initialsInvalid = defaultElement._showShadyPerson(t.firstName, t.colourId, t.failedToLoadImage);
-						assert.equal(initialsInvalid, !t.valid);
+				});
+
+				[
+					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'avatar' },
+					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: true, displayType: 'initials' },
+					{ imageUrl: 'validUrl', colourId: 1, firstName: '', failedToLoadImage: true, displayType: 'shady' },
+					{ imageUrl: '', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'initials' },
+					{ imageUrl: '', colourId: -1, firstName: 'first', failedToLoadImage: false, displayType: 'shady' },
+					{ imageUrl: '', colourId: 1, firstName: '', failedToLoadImage: false, displayType: 'shady' }
+				].forEach(function(t) {
+					test('_displayType is "' + t.displayType + '" when '
+						+ 'imageUrl is "' + t.imageUrl + '" and '
+						+ 'colourId is "' + t.colourId + '" and '
+						+ 'firstName is "' + t.firstName + '" and '
+						+ '_failedToLoadImage is "' + t.failedToLoadImage + '"',
+					function() {
+						defaultElement.set('imageUrl', t.imageUrl);
+						defaultElement.set('colourId', t.colourId);
+						defaultElement.set('firstName', t.firstName);
+						defaultElement.set('_failedToLoadImage', t.failedToLoadImage);
+						Polymer.dom.flush();
+						assert.equal(defaultElement._displayType, t.displayType);
 					});
 				});
 
 				[
-					{ imageUrl:'url', failedToLoadImage: false, showAvatar: true },
-					{ imageUrl:'url', failedToLoadImage: true, showAvatar: false },
-					{ imageUrl:'', failedToLoadImage: true, showAvatar: false },
-					{ imageUrl:'', failedToLoadImage: true, showAvatar: false }
+					{ displayType: 'avatar', showAvatar: true, showInitials: false, showShady: false },
+					{ displayType: 'initials', showAvatar: false, showInitials: true, showShady: false },
+					{ displayType: 'shady', showAvatar: false, showInitials: false, showShady: true },
 				].forEach(function(t) {
-					test('_showAvatar(' + t.imageUrl + ',' + t.failedToLoadImage + ') should return ' + t.showAvatar, function() {
-						var showAvatar = defaultElement._showAvatar(t.imageUrl, t.failedToLoadImage);
+					test('_showAvatar(' + t.displayType + ') should return ' + t.showAvatar, function() {
+						var showAvatar = defaultElement._showAvatar(t.displayType);
 						assert.equal(showAvatar, t.showAvatar);
+					});
+					test('_showInitials(' + t.displayType + ') should return ' + t.showInitials, function() {
+						var showInitials = defaultElement._showInitials(t.displayType);
+						assert.equal(showInitials, t.showInitials);
+					});
+					test('_showShadyPerson(' + t.displayType + ') should return ' + t.showShady, function() {
+						var showShady = defaultElement._showShadyPerson(t.displayType);
+						assert.equal(showShady, t.showShady);
 					});
 				});
 

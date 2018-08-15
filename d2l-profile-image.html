@@ -40,19 +40,19 @@ D2L Profile Image
 				}
 			</style>
 		</custom-style>
-		<template is="dom-if" if="[[_showShadyPerson(firstName, colourId, imageUrl, _failedToLoadImage)]]">
+		<template is="dom-if" if="[[_showShadyPerson(_displayType)]]">
 			<div class="shady-person">
 				<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
 			</div>
 		</template>
 
-		<template is="dom-if" if="[[_showInitials(firstName, colourId, imageUrl, _failedToLoadImage)]]">
+		<template is="dom-if" if="[[_showInitials(_displayType)]]">
 			<div id="initials" class="initials">
 				[[_getInitials(firstName, lastName)]]
 			</div>
 		</template>
 
-		<template is="dom-if" if="[[_showAvatar(imageUrl, _failedToLoadImage)]]">
+		<template is="dom-if" if="[[_showAvatar(_displayType)]]">
 			<img draggable="false" src="[[imageUrl]]" onError="[[_failedToLoadImageFunc()]]">
 		</template>
 
@@ -78,6 +78,10 @@ D2L Profile Image
 					type: String,
 					value: '',
 					observer: '_resetImageState'
+				},
+				_displayType: {
+					type: String,
+					observer: '_handleColourId'
 				},
 				_failedToLoadImage: {
 					type: Boolean,
@@ -112,12 +116,30 @@ D2L Profile Image
 				'#3B4148',
 				'#59616C'
 			],
+			observers: [
+				'_setDisplayType(imageUrl, _failedToLoadImage, colourId, firstName)'
+			],
 			attached: function() {
 				this._handleColourId();
 			},
 			_handleColourId: function() {
 				var backgroundColour = this._getInitialedBackgroundColour(this.colourId);
 				this.updateStyles({'--initials-background-color': backgroundColour});
+			},
+			_setDisplayType: function(imageUrl, failedToLoadImage, colourId, firstName) {
+				if (imageUrl && !failedToLoadImage) {
+					this.set('_displayType', 'avatar');
+					return;
+				}
+				else if (typeof colourId !== 'undefined' &&
+						colourId !== null &&
+						colourId > 0 &&
+						firstName
+				) {
+					this.set('_displayType', 'initials');
+					return;
+				}
+				this.set('_displayType', 'shady');
 			},
 			_failedToLoadImageFunc: function() {
 				return function() {
@@ -140,27 +162,14 @@ D2L Profile Image
 			_resetImageState: function() {
 				this.set('_failedToLoadImage', false);
 			},
-			_showAvatar: function(imageUrl, failedToLoadImage) {
-				if (imageUrl && !failedToLoadImage) {
-					return true;
-				}
-				return false;
+			_showAvatar: function(displayType) {
+				return displayType === 'avatar';
 			},
-			_showShadyPerson: function(firstName, colourId, imageUrl, failedToLoadImage) {
-				return !this._showInitials(firstName, colourId, imageUrl, failedToLoadImage)
-						&& !this._showAvatar(imageUrl, failedToLoadImage);
+			_showShadyPerson: function(displayType) {
+				return displayType === 'shady';
 			},
-			_showInitials: function(firstName, colourId, imageUrl, failedToLoadImage) {
-				if (this._showAvatar(imageUrl, failedToLoadImage)) {
-					return false;
-				}
-				if (typeof colourId === 'undefined' || colourId === null) {
-					return false;
-				}
-				else if (colourId < 0 || !firstName) {
-					return false;
-				}
-				return true;
+			_showInitials: function(displayType) {
+				return displayType === 'initials';
 			}
 		});
 	</script>
