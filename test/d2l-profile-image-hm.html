@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+	<title>d2l-profile-image-hm test</title>
+		<!-- For IE11 -->
+		<script src="../../lie/dist/lie.polyfill.min.js"></script>
+		<!-- For IE11 -->
+		<script src="../../fetch/fetch.js"></script>
+
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../../web-component-tester/browser.js"></script>
+	<link rel="import" href="../d2l-profile-image-hm.html">
+</head>
+
+<body>
+	<test-fixture id="d2l-profile-image-fixture-default">
+		<template>
+			<d2l-profile-image-hm></d2l-profile-image-hm>
+		</template>
+	</test-fixture>
+	<script>
+		suite('d2l-profile-image', function() {
+
+			var sizes = ['small', 'medium', 'large', 'x-large'];
+			var defaultElement;
+
+			setup(function() {
+				defaultElement = fixture('d2l-profile-image-fixture-default');
+			});
+
+			sizes.forEach(function(expectedSize) {
+				test('When given size of ' + expectedSize + ' ensure profile-image uses ' + expectedSize, function() {
+					defaultElement.setAttribute(expectedSize, '');
+					Polymer.dom.flush();
+
+					var profileImage = Polymer.dom(defaultElement.root).querySelector('#d2l-profile-image');
+
+					sizes.forEach(function(size) {
+						assert.equal(profileImage.hasAttribute(size), expectedSize === size);
+					});
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>

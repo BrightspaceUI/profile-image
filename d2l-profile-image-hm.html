@@ -1,0 +1,65 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-fetch-siren-entity-behavior/d2l-fetch-siren-entity-behavior.html">
+
+<link rel="import" href="./d2l-profile-image.html">
+
+<!--
+`d2l-profile-image-hm`
+D2L Profile Image Hypermedia
+@demo demo/index_hm.html
+-->
+
+<dom-module id="d2l-profile-image-hm">
+	<template strip-whitespace>
+			<style include="d2l-profile-image-shared-styles">
+			</style>
+			<d2l-profile-image
+				id="d2l-profile-image"
+				small$="[[small]]"
+				medium$="[[medium]]"
+				large$="[[large]]"
+				x-large$="[[xLarge]]">
+			</d2l-profile-image>
+	</template>
+	<script>
+		Polymer({
+			is: 'd2l-profile-image-hm',
+			properties: {
+				href: {
+					type: String,
+					observer: '_configureProfileImage'
+				},
+				small: {
+					type: Boolean
+				},
+				medium: {
+					type: Boolean
+				},
+				large: {
+					type: Boolean
+				},
+				xLarge: {
+					type: Boolean
+				}
+			},
+			behaviors: [
+				D2L.PolymerBehaviors.FetchSirenEntityBehavior
+			],
+			_configureProfileImage: function() {
+				this._fetchUserInformation()
+					.then(function() {
+						this._configureProfileImageSize();
+					}.bind(this));
+			},
+			_fetchUserInformation: function() {
+				return this._fetchEntity(this.href)
+					.then(function() {
+						// TODO: Set the attributes on the profile image
+					})
+					.catch(function() {
+						// Do nothing
+					});
+			}
+		});
+	</script>
+</dom-module>
