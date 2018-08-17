@@ -3,6 +3,7 @@
 <link rel="import" href="../d2l-icons/d2l-icon.html">
 <link rel="import" href="../d2l-icons/tier3-icons.html">
 
+<link rel="import" href="./src/d2l-profile-image-shared-styles.html">
 
 <!--
 `d2l-profile-image`
@@ -12,35 +13,7 @@ D2L Profile Image
 
 <dom-module id="d2l-profile-image">
 	<template strip-whitespace>
-		<style>
-			:host {
-				display: none;
-				width: var(--size);
-				height: var(--size);
-				--d2l-icon-height: var(--size);
-				--d2l-icon-width: var(--size);
-				overflow: hidden;
-			}
-			:host([small]) {
-				display: inline-block;
-				--size: 30px;
-				border-radius: 4px;
-			}
-			:host([medium]) {
-				display: inline-block;
-				--size: 42px;
-				border-radius: 6px;
-			}
-			:host([large]) {
-				display: inline-block;
-				--size: 60px;
-				border-radius: 8px;
-			}
-			:host([x-large]) {
-				display: inline-block;
-				--size: 84px;
-				border-radius: 8px;
-			}
+		<style include="d2l-profile-image-shared-styles">
 			.shady-person {
 				--d2l-icon-fill-color: var(--d2l-color-ferrite);
 			}

@@ -1,0 +1,40 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="d2l-profile-image-shared-styles">
+	<template>
+		<style>
+			:host {
+				display: none;
+				width: var(--size);
+				height: var(--size);
+				--d2l-icon-height: var(--size);
+				--d2l-icon-width: var(--size);
+				overflow: hidden;
+			}
+
+			:host([small]) {
+				display: inline-block;
+				--size: 30px;
+				border-radius: 4px;
+			}
+
+			:host([medium]) {
+				display: inline-block;
+				--size: 42px;
+				border-radius: 6px;
+			}
+
+			:host([large]) {
+				display: inline-block;
+				--size: 60px;
+				border-radius: 8px;
+			}
+
+			:host([x-large]) {
+				display: inline-block;
+				--size: 84px;
+				border-radius: 8px;
+			}
+		</style>
+	</template>
+</dom-module>
