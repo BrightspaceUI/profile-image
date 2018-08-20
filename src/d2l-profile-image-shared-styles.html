@@ -3,57 +3,55 @@
 
 <dom-module id="d2l-profile-image-shared-styles">
 	<template>
-		<custom-style include="d2l-typography">
-			<style is="custom-style" include="d2l-typography">
-				:host {
-					display: none;
-					overflow: hidden;
-				}
+	<style is="custom-style" include="d2l-typography">
+			:host {
+				display: none;
+				overflow: hidden;
+			}
 
-				:host([small]) {
-					display: inline-block;
-					width: 30px;
-					height: 30px;
-					--d2l-icon-height: 100%;
-					--d2l-icon-width: 100%;
-					border-radius: 4px;
-					@apply --d2l-label-text;
-					margin: 0;
-				}
+			:host([small]) {
+				display: inline-block;
+				width: 30px;
+				height: 30px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
+				border-radius: 4px;
+				@apply --d2l-label-text;
+				margin: 0;
+			}
 
-				:host([medium]) {
-					display: inline-block;
-					width: 42px;
-					height: 42px;
-					--d2l-icon-height: 100%;
-					--d2l-icon-width: 100%;
-					border-radius: 6px;
-					@apply --d2l-heading-4;
-					margin: 0;
-				}
+			:host([medium]) {
+				display: inline-block;
+				width: 42px;
+				height: 42px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
+				border-radius: 6px;
+				@apply --d2l-heading-4;
+				margin: 0;
+			}
 
-				:host([large]) {
-					display: inline-block;
-					width: 60px;
-					height: 60px;
-					--d2l-icon-height: 100%;
-					--d2l-icon-width: 100%;
-					border-radius: 8px;
-					@apply --d2l-heading-3;
-					margin: 0;
-				}
+			:host([large]) {
+				display: inline-block;
+				width: 60px;
+				height: 60px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
+				border-radius: 8px;
+				@apply --d2l-heading-3;
+				margin: 0;
+			}
 
-				:host([x-large]) {
-					display: inline-block;
-					width: 84px;
-					height: 84px;
-					--d2l-icon-height: 100%;
-					--d2l-icon-width: 100%;
-					border-radius: 8px;
-					@apply --d2l-heading-2;
-					margin: 0;
-				}
-			</style>
-		</custom-style>
+			:host([x-large]) {
+				display: inline-block;
+				width: 84px;
+				height: 84px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
+				border-radius: 8px;
+				@apply --d2l-heading-2;
+				margin: 0;
+			}
+		</style>
 	</template>
 </dom-module>
