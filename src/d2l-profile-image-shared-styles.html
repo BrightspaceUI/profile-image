@@ -5,34 +5,42 @@
 		<style>
 			:host {
 				display: none;
-				width: var(--size);
-				height: var(--size);
-				--d2l-icon-height: var(--size);
-				--d2l-icon-width: var(--size);
 				overflow: hidden;
 			}
 
 			:host([small]) {
 				display: inline-block;
-				--size: 30px;
+				width: 30px;
+				height: 30px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
 				border-radius: 4px;
 			}
 
 			:host([medium]) {
 				display: inline-block;
-				--size: 42px;
+				width: 42px;
+				height: 42px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
 				border-radius: 6px;
 			}
 
 			:host([large]) {
 				display: inline-block;
-				--size: 60px;
+				width: 60px;
+				height: 60px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
 				border-radius: 8px;
 			}
 
 			:host([x-large]) {
 				display: inline-block;
-				--size: 84px;
+				width: 84px;
+				height: 84px;
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
 				border-radius: 8px;
 			}
 		</style>
