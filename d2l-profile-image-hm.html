@@ -18,7 +18,10 @@ D2L Profile Image Hypermedia
 				small$="[[small]]"
 				medium$="[[medium]]"
 				large$="[[large]]"
-				x-large$="[[xLarge]]">
+				x-large$="[[xLarge]]"
+				first-name="[[_firstName]]"
+				last-name="[[_lastName]]"
+				colour-id="[[_colourId]]">
 			</d2l-profile-image>
 	</template>
 	<script>
@@ -40,6 +43,18 @@ D2L Profile Image Hypermedia
 				},
 				xLarge: {
 					type: Boolean
+				},
+				_firstName: {
+					type: String,
+					value: ''
+				},
+				_lastName: {
+					type: String,
+					value: ''
+				},
+				_colourId: {
+					type: Number,
+					value: -1
 				}
 			},
 			behaviors: [
@@ -53,9 +68,32 @@ D2L Profile Image Hypermedia
 			},
 			_fetchUserInformation: function() {
 				return this._fetchEntity(this.href)
-					.then(function() {
-						// TODO: Set the attributes on the profile image
-					})
+					.then(function(data) {
+						var firstName = data.getSubEntityByRel('https://api.brightspace.com/rels/first-name');
+						if (!firstName.hasClass('default-name')) {
+							this.set('_firstName', firstName.properties.name);
+						}
+						else {
+							this.set('_firstName', '');
+						}
+
+						var lastName = data.getSubEntityByRel('https://api.brightspace.com/rels/last-name');
+						if (!lastName.hasClass('default-name')) {
+							this.set('_lastName', lastName.properties.name);
+						}
+						else {
+							this.set('_lastName', '');
+						}
+
+						var selfLink = data.getLinkByRel('self').href;
+						var userId = selfLink.split('/').pop();
+						if (!isNaN(userId)) {
+							this.set('_colourId', userId);
+						}
+						else {
+							this.set('_colourId', -1);
+						}
+					}.bind(this))
 					.catch(function() {
 						// Do nothing
 					});
