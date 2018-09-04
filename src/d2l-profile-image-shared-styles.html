@@ -1,8 +1,9 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../d2l-typography/d2l-typography.html">
 
 <dom-module id="d2l-profile-image-shared-styles">
 	<template>
-		<style>
+	<style is="custom-style" include="d2l-typography">
 			:host {
 				display: none;
 				overflow: hidden;
@@ -15,6 +16,8 @@
 				--d2l-icon-height: 100%;
 				--d2l-icon-width: 100%;
 				border-radius: 4px;
+				@apply --d2l-label-text;
+				margin: 0;
 			}
 
 			:host([medium]) {
@@ -24,6 +27,8 @@
 				--d2l-icon-height: 100%;
 				--d2l-icon-width: 100%;
 				border-radius: 6px;
+				@apply --d2l-heading-4;
+				margin: 0;
 			}
 
 			:host([large]) {
@@ -33,6 +38,8 @@
 				--d2l-icon-height: 100%;
 				--d2l-icon-width: 100%;
 				border-radius: 8px;
+				@apply --d2l-heading-3;
+				margin: 0;
 			}
 
 			:host([x-large]) {
@@ -42,6 +49,8 @@
 				--d2l-icon-height: 100%;
 				--d2l-icon-width: 100%;
 				border-radius: 8px;
+				@apply --d2l-heading-2;
+				margin: 0;
 			}
 		</style>
 	</template>
