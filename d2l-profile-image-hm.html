@@ -21,7 +21,8 @@ D2L Profile Image Hypermedia
 				x-large$="[[xLarge]]"
 				first-name="[[_firstName]]"
 				last-name="[[_lastName]]"
-				colour-id="[[_colourId]]">
+				colour-id="[[_colourId]]"
+				image-url="[[_imageUrl]]">
 			</d2l-profile-image>
 	</template>
 	<script>
@@ -55,6 +56,10 @@ D2L Profile Image Hypermedia
 				_colourId: {
 					type: Number,
 					value: -1
+				},
+				_imageUrl: {
+					type: String,
+					value: ''
 				}
 			},
 			behaviors: [
@@ -69,6 +74,19 @@ D2L Profile Image Hypermedia
 			_fetchUserInformation: function() {
 				return this._fetchEntity(this.href)
 					.then(function(data) {
+						if (data.hasSubEntityByRel('https://api.brightspace.com/rels/user-profile')) {
+							var userProfile = data.getSubEntityByRel('https://api.brightspace.com/rels/user-profile');
+							var profileImage = userProfile.getSubEntityByRel('https://api.brightspace.com/rels/profile-image');
+
+							if (!profileImage.hasClass('default-image')) {
+								var imageEntity = profileImage.getLinkByRel('https://api.brightspace.com/rels/thumbnail#small');
+								this.set('_imageUrl', imageEntity.href);
+							}
+							else{
+								this.set('_imageUrl', '');
+							}
+						}
+
 						var firstName = data.getSubEntityByRel('https://api.brightspace.com/rels/first-name');
 						if (!firstName.hasClass('default-name')) {
 							this.set('_firstName', firstName.properties.name);
