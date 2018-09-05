@@ -15,6 +15,10 @@ D2L Profile Image
 	<template strip-whitespace>
 
 		<style include="d2l-profile-image-shared-styles">
+				img {
+					width: 100%;
+					height: 100%;
+				}
 				.initials {
 					background-color: var(--initials-background-color);
 					color: var(--d2l-color-regolith);
@@ -36,16 +40,20 @@ D2L Profile Image
 				}
 			</style>
 		</custom-style>
-		<template is="dom-if" if="[[_showShadyPerson(firstName, colourId)]]">
+		<template is="dom-if" if="[[_showShadyPerson(firstName, colourId, imageUrl, _failedToLoadImage)]]">
 			<div class="shady-person">
 				<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
 			</div>
 		</template>
 
-		<template is="dom-if" if="[[_showInitials(firstName, colourId)]]">
+		<template is="dom-if" if="[[_showInitials(firstName, colourId, imageUrl, _failedToLoadImage)]]">
 			<div id="initials" class="initials">
 				[[_getInitials(firstName, lastName)]]
 			</div>
+		</template>
+
+		<template is="dom-if" if="[[_showAvatar(imageUrl, _failedToLoadImage)]]">
+			<img draggable="false" src="[[imageUrl]]" onError="[[_failedToLoadImageFunc()]]">
 		</template>
 
 	</template>
@@ -65,6 +73,15 @@ D2L Profile Image
 					type: Number,
 					value: -1,
 					observer: '_handleColourId'
+				},
+				imageUrl: {
+					type: String,
+					value: '',
+					observer: '_resetImageState'
+				},
+				_failedToLoadImage: {
+					type: Boolean,
+					value: false
 				}
 			},
 			// WARNING
@@ -102,6 +119,11 @@ D2L Profile Image
 				var backgroundColour = this._getInitialedBackgroundColour(this.colourId);
 				this.updateStyles({'--initials-background-color': backgroundColour});
 			},
+			_failedToLoadImageFunc: function() {
+				return function() {
+					this.set('_failedToLoadImage', true);
+				}.bind(this);
+			},
 			_getInitialedBackgroundColour: function(colourId) {
 				var idx = colourId % this.__backgroundColours.length;
 				return this.__backgroundColours[idx];
@@ -115,10 +137,23 @@ D2L Profile Image
 				}
 				return '';
 			},
-			_showShadyPerson: function(firstName, colourId) {
-				return !this._showInitials(firstName, colourId);
+			_resetImageState: function() {
+				this.set('_failedToLoadImage', false);
 			},
-			_showInitials: function(firstName, colourId) {
+			_showAvatar: function(imageUrl, failedToLoadImage) {
+				if (imageUrl && !failedToLoadImage) {
+					return true;
+				}
+				return false;
+			},
+			_showShadyPerson: function(firstName, colourId, imageUrl, failedToLoadImage) {
+				return !this._showInitials(firstName, colourId, imageUrl, failedToLoadImage)
+						&& !this._showAvatar(imageUrl, failedToLoadImage);
+			},
+			_showInitials: function(firstName, colourId, imageUrl, failedToLoadImage) {
+				if (this._showAvatar(imageUrl, failedToLoadImage)) {
+					return false;
+				}
 				if (typeof colourId === 'undefined' || colourId === null) {
 					return false;
 				}
