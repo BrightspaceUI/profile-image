@@ -30,14 +30,13 @@
 		{
 			"class": [
 				"last",
-				"name",
-				"default-name"
+				"name"
 			],
 			"rel": [
 				"https://api.brightspace.com/rels/last-name"
 			],
 			"properties": {
-				"name": "Anonymous User"
+				"name": "Last"
 			}
 		},
 		{
