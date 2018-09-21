@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>d2l-profile-image-base demo</title>
+		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+		<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+		<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+		<link rel="import" href="../../d2l-typography/d2l-typography.html">
+		<link rel="import" href="../d2l-profile-image-base.html">
+		<custom-style>
+			<style is="custom-style" include="demo-pages-shared-styles"></style>
+		</custom-style>
+		<custom-style include="d2l-typography">
+			<style is="custom-style" include="d2l-typography"></style>
+		</custom-style>
+		<style>
+			html {
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	<body unresolved class="d2l-typography">
+		<div class="vertical-section-container centered">
+			<h3>d2l-profile-image-base</h3>
+			<demo-snippet>
+				<template>
+					Specification for the design can be found at
+					<a href="http://design.d2l/components/profile-images/">design.d2l</a>.
+					<hr/>
+
+					Below is how the profile-image will be displayed when no attributes are set.
+					<ul>
+						<li>
+							Invalid/Missing image size will not show anything on the page
+						</li>
+						<li>
+							Small image size
+						</li>
+						<li>
+							Medium image size
+						</li>
+						<li>
+							Large image size
+						</li>
+						<li>
+							X-Large image size
+						</li>
+					</ul>
+					<hr/>
+
+					<d2l-profile-image-base></d2l-profile-image-base>
+					<br/>
+
+					<d2l-profile-image-base small></d2l-profile-image-base>
+					<br/>
+
+					<d2l-profile-image-base medium></d2l-profile-image-base>
+					<br/>
+
+					<d2l-profile-image-base large></d2l-profile-image-base>
+					<br/>
+
+					<d2l-profile-image-base x-large></d2l-profile-image-base>
+				</template>
+			</demo-snippet>
+			<demo-snippet>
+				<template>
+					Demonstrated below are some examples when trying to load an avatar with initials:
+					<ul>
+						<li>
+							Initials fail to display because the colour-id is not specified
+						</li>
+						<li>
+							Initials fail to display because the first-name attribute is invalid/missing
+						</li>
+						<li>
+							Initials shown incomplete because last-name attribute is invalid/missing
+						</li>
+						<li>
+							Initials shown complete beause colour-id, first-name and last-name are all valid
+						</li>
+					</ul>
+					<hr/>
+
+					<d2l-profile-image-base
+						first-name="first"
+						last-name="last"
+						small>
+					</d2l-profile-image-base>
+					<br/>
+
+					<d2l-profile-image-base
+						last-name="last"
+						colour-id="2"
+						medium>
+					</d2l-profile-image-base>
+					<br/>
+
+					<d2l-profile-image-base
+						first-name="first"
+						colour-id="3"
+						large>
+					</d2l-profile-image-base>
+					<br/>
+
+					<d2l-profile-image-base
+						first-name="FIRST"
+						last-name="LAST"
+						colour-id="404"
+						x-large>
+					</d2l-profile-image-base>
+				</template>
+			</demo-snippet>
+				<demo-snippet>
+					<template>
+						Demonstrated below are some examples when trying to load an avatar with an image:
+						<ul>
+							<li>
+								Image fails to load, and no valid attributes to provide initials
+							</li>
+							<li>
+								Image fails to load, with missing last-name but valid attributes to provide initials
+							</li>
+							<li>
+								Image fails to load, with valid attributes to provide initials
+							</li>
+							<li>
+								Image loads successfully
+							</li>
+						</ul>
+						<hr/>
+
+						<d2l-profile-image-base
+							colour-id="3"
+							image-url="./img/invalid.png"
+							small>
+						</d2l-profile-image-base>
+						<br/>
+
+						<d2l-profile-image-base
+							first-name="first"
+							colour-id="6"
+							image-url="./img/invalid.png"
+							medium>
+						</d2l-profile-image-base>
+						<br/>
+
+						<d2l-profile-image-base
+							first-name="first"
+							last-name="last"
+							colour-id="10"
+							image-url="./img/invalid.png"
+							large>
+						</d2l-profile-image-base>
+						<br/>
+
+						<d2l-profile-image-base
+							first-name="first"
+							last-name="last"
+							colour-id="10"
+							image-url="./img/d2l-moose.png"
+							x-large>
+						</d2l-profile-image-base>
+
+					</template>
+				</demo-snippet>
+		</div>
+	</body>
+</html>

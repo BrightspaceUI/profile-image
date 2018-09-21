@@ -1,175 +1,118 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../d2l-colors/d2l-colors.html">
-<link rel="import" href="../d2l-icons/d2l-icon.html">
-<link rel="import" href="../d2l-icons/tier3-icons.html">
+<link rel="import" href="../d2l-fetch-siren-entity-behavior/d2l-fetch-siren-entity-behavior.html">
 
-<link rel="import" href="./src/d2l-profile-image-shared-styles.html">
+<link rel="import" href="./d2l-profile-image-base.html">
 
 <!--
 `d2l-profile-image`
-D2L Profile Image
+D2L Profile Image Hypermedia
 @demo demo/index.html
 -->
 
 <dom-module id="d2l-profile-image">
 	<template strip-whitespace>
-
-		<style include="d2l-profile-image-shared-styles">
-				img {
-					width: 100%;
-					height: 100%;
-				}
-				.initials {
-					background-color: var(--initials-background-color);
-					color: var(--d2l-color-regolith);
-					width: 100%;
-					height: 100%;
-					text-align: center;
-					display : flex;
-					align-items : center;
-					justify-content: center;
-				}
-				.shady-person {
-					--d2l-icon-fill-color: var(--d2l-color-ferrite);
-				}
-				@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-					.shady-person{
-							width: 100%;
-							height: 100%;
-					}
-				}
+			<style include="d2l-profile-image-shared-styles">
 			</style>
-		</custom-style>
-		<template is="dom-if" if="[[_showShadyPerson(_displayType)]]">
-			<div class="shady-person">
-				<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
-			</div>
-		</template>
-
-		<template is="dom-if" if="[[_showInitials(_displayType)]]">
-			<div id="initials" class="initials">
-				[[_getInitials(firstName, lastName)]]
-			</div>
-		</template>
-
-		<template is="dom-if" if="[[_showAvatar(_displayType)]]">
-			<img draggable="false" src="[[imageUrl]]" onError="[[_failedToLoadImageFunc()]]">
-		</template>
-
+			<d2l-profile-image-base
+				id="d2l-profile-image"
+				small$="[[small]]"
+				medium$="[[medium]]"
+				large$="[[large]]"
+				x-large$="[[xLarge]]"
+				first-name="[[_firstName]]"
+				last-name="[[_lastName]]"
+				colour-id="[[_colourId]]"
+				image-url="[[_imageUrl]]">
+			</d2l-profile-image-base>
 	</template>
 	<script>
 		Polymer({
 			is: 'd2l-profile-image',
 			properties: {
-				firstName: {
+				href: {
+					type: String,
+					observer: '_configureProfileImage'
+				},
+				small: {
+					type: Boolean
+				},
+				medium: {
+					type: Boolean
+				},
+				large: {
+					type: Boolean
+				},
+				xLarge: {
+					type: Boolean
+				},
+				_firstName: {
 					type: String,
 					value: ''
 				},
-				lastName: {
+				_lastName: {
 					type: String,
 					value: ''
 				},
-				colourId: {
+				_colourId: {
 					type: Number,
-					value: -1,
-					observer: '_handleColourId'
+					value: -1
 				},
-				imageUrl: {
+				_imageUrl: {
 					type: String,
-					value: '',
-					observer: '_resetImageState'
-				},
-				_displayType: {
-					type: String,
-					observer: '_handleColourId'
-				},
-				_failedToLoadImage: {
-					type: Boolean,
-					value: false
+					value: ''
 				}
 			},
-			// WARNING
-			// Changing the order, as well as adding or removing a colour
-			// May result in background colours to change for a given colourId
-			// Only update if you have the correct approval
-			__backgroundColours: [
-				'#8B271F',
-				'#CF3A2F',
-				'#C74F05',
-				'#527F1F',
-				'#346633',
-				'#165F5B',
-				'#1F826B',
-				'#0C7683',
-				'#3155BF',
-				'#4476C1',
-				'#383773',
-				'#6F6BB8',
-				'#50305F',
-				'#9860AF',
-				'#804167',
-				'#AB578A',
-				'#8C2855',
-				'#D13B7F',
-				'#47565E',
-				'#5F727D',
-				'#3B4148',
-				'#59616C'
+			behaviors: [
+				D2L.PolymerBehaviors.FetchSirenEntityBehavior
 			],
-			observers: [
-				'_setDisplayType(imageUrl, _failedToLoadImage, colourId, firstName)'
-			],
-			attached: function() {
-				this._handleColourId();
+			_configureProfileImage: function() {
+				this._fetchUserInformation();
 			},
-			_handleColourId: function() {
-				var backgroundColour = this._getInitialedBackgroundColour(this.colourId);
-				this.updateStyles({'--initials-background-color': backgroundColour});
-			},
-			_setDisplayType: function(imageUrl, failedToLoadImage, colourId, firstName) {
-				if (imageUrl && !failedToLoadImage) {
-					this.set('_displayType', 'avatar');
-					return;
-				}
-				else if (typeof colourId !== 'undefined' &&
-						colourId !== null &&
-						colourId > 0 &&
-						firstName
-				) {
-					this.set('_displayType', 'initials');
-					return;
-				}
-				this.set('_displayType', 'shady');
-			},
-			_failedToLoadImageFunc: function() {
-				return function() {
-					this.set('_failedToLoadImage', true);
-				}.bind(this);
-			},
-			_getInitialedBackgroundColour: function(colourId) {
-				var idx = colourId % this.__backgroundColours.length;
-				return this.__backgroundColours[idx];
-			},
-			_getInitials: function(firstName, lastName) {
-				if (firstName && lastName) {
-					return firstName[0].toUpperCase() + lastName[0].toUpperCase();
-				}
-				else if (firstName) {
-					return firstName[0].toUpperCase();
-				}
-				return '';
-			},
-			_resetImageState: function() {
-				this.set('_failedToLoadImage', false);
-			},
-			_showAvatar: function(displayType) {
-				return displayType === 'avatar';
-			},
-			_showShadyPerson: function(displayType) {
-				return displayType === 'shady';
-			},
-			_showInitials: function(displayType) {
-				return displayType === 'initials';
+			_fetchUserInformation: function() {
+				return this._fetchEntity(this.href)
+					.then(function(data) {
+
+						this.set('_imageUrl', '');
+						if (data.hasSubEntityByRel('https://api.brightspace.com/rels/user-profile')) {
+
+							var userProfile = data.getSubEntityByRel('https://api.brightspace.com/rels/user-profile');
+							if (userProfile) {
+
+								var profileImage = userProfile.getSubEntityByRel('https://api.brightspace.com/rels/profile-image');
+								if (profileImage && !profileImage.hasClass('default-image')) {
+
+									var imageEntity = profileImage.getLinkByRel('https://api.brightspace.com/rels/thumbnail#regular');
+									this.set('_imageUrl', imageEntity.href);
+								}
+							}
+						}
+
+						this.set('_firstName', '');
+						var firstName = data.getSubEntityByRel('https://api.brightspace.com/rels/first-name');
+						if (!firstName.hasClass('default-name')) {
+							this.set('_firstName', firstName.properties.name);
+						}
+
+						this.set('_lastName', '');
+						var lastName = data.getSubEntityByRel('https://api.brightspace.com/rels/last-name');
+						if (!lastName.hasClass('default-name')) {
+							this.set('_lastName', lastName.properties.name);
+						}
+
+						this.set('_colourId', -1);
+						var selfLink = data.getLinkByRel('self').href;
+						var userId = selfLink.split('/').pop();
+						if (!isNaN(userId)) {
+							this.set('_colourId', userId);
+						}
+
+					}.bind(this))
+					.catch(function() {
+						this.set('_imageUrl', '');
+						this.set('_firstName', '');
+						this.set('_lastName', '');
+						this.set('_colourId', -1);
+					}.bind(this));
 			}
 		});
 	</script>

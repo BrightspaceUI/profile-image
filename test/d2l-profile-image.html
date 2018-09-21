@@ -1,142 +1,179 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-		<title>d2l-profile-image test</title>
-		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-		<script src="../../web-component-tester/browser.js"></script>
-		<link rel="import" href="../d2l-profile-image.html">
-	</head>
-	<body>
-		<test-fixture id="d2l-profile-image-fixture-default">
-			<template>
-				<d2l-profile-image></d2l-profile-image>
-			</template>
-		</test-fixture>
-		<test-fixture id="d2l-profile-image-fixture-small">
-			<template>
-				<d2l-profile-image small></d2l-profile-image>
-			</template>
-		</test-fixture>
-		<test-fixture id="d2l-profile-image-fixture-medium">
-			<template>
-				<d2l-profile-image medium></d2l-profile-image>
-			</template>
-		</test-fixture>
-		<test-fixture id="d2l-profile-image-fixture-large">
-			<template>
-				<d2l-profile-image large></d2l-profile-image>
-			</template>
-		</test-fixture>
-		<test-fixture id="d2l-profile-image-fixture-x-large">
-			<template>
-				<d2l-profile-image x-large></d2l-profile-image>
-			</template>
-		</test-fixture>
-		<script>
-			suite('d2l-profile-image', function() {
 
-				var sizes = ['small', 'medium', 'large', 'x-large'];
-				var elements = {};
-				var defaultElement;
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+	<title>d2l-profile-image test</title>
+		<!-- For IE11 -->
+		<script src="../../lie/dist/lie.polyfill.min.js"></script>
+		<!-- For IE11 -->
+		<script src="../../fetch/fetch.js"></script>
 
-				setup(function() {
-					defaultElement = fixture('d2l-profile-image-fixture-default');
-					sizes.forEach(function(size) {
-						elements[size] = fixture('d2l-profile-image-fixture-' + size);
-					});
-				});
+	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../../web-component-tester/browser.js"></script>
+	<link rel="import" href="../d2l-profile-image.html">
+</head>
 
-				// Specification can be found at
-				// http://design.d2l/components/profile-images/
-				[
-					{ size:'small', expectedLength: 30 },
-					{ size:'medium', expectedLength: 42 },
-					{ size:'large', expectedLength: 60 },
-					{ size:'x-large', expectedLength: 84 },
-				].forEach(function(testCase) {
-					test(testCase.size + ' profile image is sized according to spec', function() {
-						var element = elements[testCase.size];
-						assert.equal(element.offsetWidth, testCase.expectedLength);
-						assert.equal(element.offsetHeight, testCase.expectedLength);
-					});
-				});
+<body>
+	<test-fixture id="d2l-profile-image-fixture-default">
+		<template>
+			<d2l-profile-image></d2l-profile-image>
+		</template>
+	</test-fixture>
+	<script>
+		suite('d2l-profile-image-base', function() {
 
-				[
-					{ firstName: 'First', lastName: 'Last', expectedInitials: 'FL'},
-					{ firstName: 'first', lastName: 'last', expectedInitials: 'FL' },
-					{ firstName: 'first', lastName: undefined, expectedInitials: 'F' },
-					{ firstName: 'first', lastName: null, expectedInitials: 'F' },
-					{ firstName: 'first', lastName: '', expectedInitials: 'F' },
-					{ firstName: '', lastName: 'last', expectedInitials: '' },
-					{ firstName: undefined, lastName: 'last', expectedInitials: '' },
-					{ firstName: null, lastName: 'last', expectedInitials: '' },
-				].forEach(function(t) {
-					test('_getInitials(' + t.firstName + ',' + t.lastName + ') should return ' + t.expectedInitials, function() {
-						var initials = defaultElement._getInitials(t.firstName, t.lastName);
-						assert.equal(initials, t.expectedInitials);
-					});
-				});
+			var sizes = ['small', 'medium', 'large', 'x-large'];
+			var defaultElement;
 
-				[
-					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'avatar' },
-					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: true, displayType: 'initials' },
-					{ imageUrl: 'validUrl', colourId: 1, firstName: '', failedToLoadImage: true, displayType: 'shady' },
-					{ imageUrl: '', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'initials' },
-					{ imageUrl: '', colourId: -1, firstName: 'first', failedToLoadImage: false, displayType: 'shady' },
-					{ imageUrl: '', colourId: 1, firstName: '', failedToLoadImage: false, displayType: 'shady' }
-				].forEach(function(t) {
-					test('_displayType is "' + t.displayType + '" when '
-						+ 'imageUrl is "' + t.imageUrl + '" and '
-						+ 'colourId is "' + t.colourId + '" and '
-						+ 'firstName is "' + t.firstName + '" and '
-						+ '_failedToLoadImage is "' + t.failedToLoadImage + '"',
-					function() {
-						defaultElement.set('imageUrl', t.imageUrl);
-						defaultElement.set('colourId', t.colourId);
-						defaultElement.set('firstName', t.firstName);
-						defaultElement.set('_failedToLoadImage', t.failedToLoadImage);
-						Polymer.dom.flush();
-						assert.equal(defaultElement._displayType, t.displayType);
-					});
-				});
-
-				[
-					{ displayType: 'avatar', showAvatar: true, showInitials: false, showShady: false },
-					{ displayType: 'initials', showAvatar: false, showInitials: true, showShady: false },
-					{ displayType: 'shady', showAvatar: false, showInitials: false, showShady: true },
-				].forEach(function(t) {
-					test('_showAvatar(' + t.displayType + ') should return ' + t.showAvatar, function() {
-						var showAvatar = defaultElement._showAvatar(t.displayType);
-						assert.equal(showAvatar, t.showAvatar);
-					});
-					test('_showInitials(' + t.displayType + ') should return ' + t.showInitials, function() {
-						var showInitials = defaultElement._showInitials(t.displayType);
-						assert.equal(showInitials, t.showInitials);
-					});
-					test('_showShadyPerson(' + t.displayType + ') should return ' + t.showShady, function() {
-						var showShady = defaultElement._showShadyPerson(t.displayType);
-						assert.equal(showShady, t.showShady);
-					});
-				});
-
-				test('_getInitialedBackgroundColour consistently maps to the same colour', function() {
-					var n = 50;
-					var colourMapping = {};
-
-					var i;
-					for (i = 0; i < n; i++) {
-						var colourFirstTime = defaultElement._getInitialedBackgroundColour(i);
-						colourMapping[i] = colourFirstTime;
-					}
-					for (i = 0; i < n; i++) {
-						var colourSecondTime = defaultElement._getInitialedBackgroundColour(i);
-						assert.equal(colourSecondTime, colourMapping[i]);
-					}
-				});
-
+			setup(function() {
+				defaultElement = fixture('d2l-profile-image-fixture-default');
 			});
-		</script>
-	</body>
+
+			sizes.forEach(function(expectedSize) {
+				test('When given size of ' + expectedSize + ' ensure profile-image uses ' + expectedSize, function() {
+					defaultElement.setAttribute(expectedSize, '');
+					Polymer.dom.flush();
+
+					var profileImage = Polymer.dom(defaultElement.root).querySelector('#d2l-profile-image');
+
+					sizes.forEach(function(size) {
+						assert.equal(profileImage.hasAttribute(size), expectedSize === size);
+					});
+				});
+			});
+
+			[
+				{ 'anonFirst' : false, 'anonLast': false },
+				{ 'anonFirst' : false, 'anonLast': true },
+				{ 'anonFirst' : true, 'anonLast': false },
+				{ 'anonFirst' : true, 'anonLast': true }
+			].forEach(function(t) {
+				test('Correct naming configuration when first name anon ' + t.anonFirst + ' and last name anon ' + t.anonLast, function(done) {
+					var userId = 169;
+					var href = 'https://tenant.users.api.proddev.d2l/' + userId;
+					var firstName = 'First';
+					var firstClass = t.anonFirst ? ['default-name'] : [];
+					var lastName = 'Last';
+					var lastClass = t.anonLast ? ['default-name'] : [];
+					var response = {
+						'entities': [
+							{
+								'class': firstClass,
+								'rel': [
+									'https://api.brightspace.com/rels/first-name'
+								],
+								'properties': {
+									'name': firstName
+								}
+							},
+							{
+								'class': lastClass,
+								'rel': [
+									'https://api.brightspace.com/rels/last-name'
+								],
+								'properties': {
+									'name': lastName
+								}
+							}
+						],
+						'links': [
+							{ 'rel': ['self'], 'href': href }
+						]
+					};
+					defaultElement._fetchEntity = sinon.stub();
+					defaultElement._fetchEntity
+						.withArgs(sinon.match(href))
+						.returns(Promise.resolve(window.D2L.Hypermedia.Siren.Parse(response)));
+
+					defaultElement.href = href;
+
+					defaultElement._fetchUserInformation()
+						.then(function() {
+							flush(function() {
+								assert.equal(defaultElement._firstName, t.anonFirst ? '' : firstName);
+								assert.equal(defaultElement._lastName, t.anonLast ? '' : lastName);
+								assert.equal(defaultElement._colourId, userId);
+
+								var profileImage = Polymer.dom(defaultElement.root).querySelector('#d2l-profile-image');
+								assert.equal(profileImage.firstName, t.anonFirst ? '' : firstName);
+								assert.equal(profileImage.lastName, t.anonLast ? '' : lastName);
+								assert.equal(profileImage.colourId, userId);
+								done();
+							});
+						}.bind(this));
+
+				});
+			});
+
+			[true, false].forEach(function(isDefaultImage) {
+				test('Correct image configured when default image is ' + isDefaultImage, function(done) {
+					var href = 'https://tenant.users.api.proddev.d2l/169';
+					var expectedImage = 'expectedImage.png';
+					var imageClass = isDefaultImage ? ['default-image'] : [];
+					var response = {
+						'entities': [
+							{
+								'class': [],
+								'rel': [
+									'https://api.brightspace.com/rels/first-name'
+								],
+								'properties': {
+									'name': 'firstName'
+								}
+							},
+							{
+								'class': [],
+								'rel': [
+									'https://api.brightspace.com/rels/last-name'
+								],
+								'properties': {
+									'name': 'lastName'
+								}
+							},
+							{
+								'rel': ['https://api.brightspace.com/rels/user-profile'],
+								'entities': [
+									{
+										'rel': ['https://api.brightspace.com/rels/profile-image'],
+										'class': imageClass,
+										'links': [
+											{
+												'rel': ['https://api.brightspace.com/rels/thumbnail#regular'],
+												'href': expectedImage
+											}
+										]
+									}
+								]
+							}
+						],
+						'links': [
+							{ 'rel': ['self'], 'href': href }
+						]
+					};
+					defaultElement._fetchEntity = sinon.stub();
+					defaultElement._fetchEntity
+						.withArgs(sinon.match(href))
+						.returns(Promise.resolve(window.D2L.Hypermedia.Siren.Parse(response)));
+
+					defaultElement.href = href;
+
+					defaultElement._fetchUserInformation()
+						.then(function() {
+							flush(function() {
+								assert.equal(defaultElement._imageUrl, isDefaultImage ? '' : expectedImage);
+
+								var profileImage = Polymer.dom(defaultElement.root).querySelector('#d2l-profile-image');
+								assert.equal(profileImage.imageUrl, isDefaultImage ? '' : expectedImage);
+
+								done();
+							});
+						}.bind(this));
+				});
+			});
+		});
+	</script>
+</body>
+
 </html>

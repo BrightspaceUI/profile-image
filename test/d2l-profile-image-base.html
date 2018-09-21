@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+		<title>d2l-profile-image-base test</title>
+		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+		<script src="../../web-component-tester/browser.js"></script>
+		<link rel="import" href="../d2l-profile-image-base.html">
+	</head>
+	<body>
+		<test-fixture id="d2l-profile-image-fixture-default">
+			<template>
+				<d2l-profile-image-base></d2l-profile-image-base>
+			</template>
+		</test-fixture>
+		<test-fixture id="d2l-profile-image-fixture-small">
+			<template>
+				<d2l-profile-image-base small></d2l-profile-image-base>
+			</template>
+		</test-fixture>
+		<test-fixture id="d2l-profile-image-fixture-medium">
+			<template>
+				<d2l-profile-image-base medium></d2l-profile-image-base>
+			</template>
+		</test-fixture>
+		<test-fixture id="d2l-profile-image-fixture-large">
+			<template>
+				<d2l-profile-image-base large></d2l-profile-image-base>
+			</template>
+		</test-fixture>
+		<test-fixture id="d2l-profile-image-fixture-x-large">
+			<template>
+				<d2l-profile-image-base x-large></d2l-profile-image-base>
+			</template>
+		</test-fixture>
+		<script>
+			suite('d2l-profile-image', function() {
+
+				var sizes = ['small', 'medium', 'large', 'x-large'];
+				var elements = {};
+				var defaultElement;
+
+				setup(function() {
+					defaultElement = fixture('d2l-profile-image-fixture-default');
+					sizes.forEach(function(size) {
+						elements[size] = fixture('d2l-profile-image-fixture-' + size);
+					});
+				});
+
+				// Specification can be found at
+				// http://design.d2l/components/profile-images/
+				[
+					{ size:'small', expectedLength: 30 },
+					{ size:'medium', expectedLength: 42 },
+					{ size:'large', expectedLength: 60 },
+					{ size:'x-large', expectedLength: 84 },
+				].forEach(function(testCase) {
+					test(testCase.size + ' profile image is sized according to spec', function() {
+						var element = elements[testCase.size];
+						assert.equal(element.offsetWidth, testCase.expectedLength);
+						assert.equal(element.offsetHeight, testCase.expectedLength);
+					});
+				});
+
+				[
+					{ firstName: 'First', lastName: 'Last', expectedInitials: 'FL'},
+					{ firstName: 'first', lastName: 'last', expectedInitials: 'FL' },
+					{ firstName: 'first', lastName: undefined, expectedInitials: 'F' },
+					{ firstName: 'first', lastName: null, expectedInitials: 'F' },
+					{ firstName: 'first', lastName: '', expectedInitials: 'F' },
+					{ firstName: '', lastName: 'last', expectedInitials: '' },
+					{ firstName: undefined, lastName: 'last', expectedInitials: '' },
+					{ firstName: null, lastName: 'last', expectedInitials: '' },
+				].forEach(function(t) {
+					test('_getInitials(' + t.firstName + ',' + t.lastName + ') should return ' + t.expectedInitials, function() {
+						var initials = defaultElement._getInitials(t.firstName, t.lastName);
+						assert.equal(initials, t.expectedInitials);
+					});
+				});
+
+				[
+					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'avatar' },
+					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: true, displayType: 'initials' },
+					{ imageUrl: 'validUrl', colourId: 1, firstName: '', failedToLoadImage: true, displayType: 'shady' },
+					{ imageUrl: '', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'initials' },
+					{ imageUrl: '', colourId: -1, firstName: 'first', failedToLoadImage: false, displayType: 'shady' },
+					{ imageUrl: '', colourId: 1, firstName: '', failedToLoadImage: false, displayType: 'shady' }
+				].forEach(function(t) {
+					test('_displayType is "' + t.displayType + '" when '
+						+ 'imageUrl is "' + t.imageUrl + '" and '
+						+ 'colourId is "' + t.colourId + '" and '
+						+ 'firstName is "' + t.firstName + '" and '
+						+ '_failedToLoadImage is "' + t.failedToLoadImage + '"',
+					function() {
+						defaultElement.set('imageUrl', t.imageUrl);
+						defaultElement.set('colourId', t.colourId);
+						defaultElement.set('firstName', t.firstName);
+						defaultElement.set('_failedToLoadImage', t.failedToLoadImage);
+						Polymer.dom.flush();
+						assert.equal(defaultElement._displayType, t.displayType);
+					});
+				});
+
+				[
+					{ displayType: 'avatar', showAvatar: true, showInitials: false, showShady: false },
+					{ displayType: 'initials', showAvatar: false, showInitials: true, showShady: false },
+					{ displayType: 'shady', showAvatar: false, showInitials: false, showShady: true },
+				].forEach(function(t) {
+					test('_showAvatar(' + t.displayType + ') should return ' + t.showAvatar, function() {
+						var showAvatar = defaultElement._showAvatar(t.displayType);
+						assert.equal(showAvatar, t.showAvatar);
+					});
+					test('_showInitials(' + t.displayType + ') should return ' + t.showInitials, function() {
+						var showInitials = defaultElement._showInitials(t.displayType);
+						assert.equal(showInitials, t.showInitials);
+					});
+					test('_showShadyPerson(' + t.displayType + ') should return ' + t.showShady, function() {
+						var showShady = defaultElement._showShadyPerson(t.displayType);
+						assert.equal(showShady, t.showShady);
+					});
+				});
+
+				test('_getInitialedBackgroundColour consistently maps to the same colour', function() {
+					var n = 50;
+					var colourMapping = {};
+
+					var i;
+					for (i = 0; i < n; i++) {
+						var colourFirstTime = defaultElement._getInitialedBackgroundColour(i);
+						colourMapping[i] = colourFirstTime;
+					}
+					for (i = 0; i < n; i++) {
+						var colourSecondTime = defaultElement._getInitialedBackgroundColour(i);
+						assert.equal(colourSecondTime, colourMapping[i]);
+					}
+				});
+
+			});
+		</script>
+	</body>
+</html>

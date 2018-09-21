@@ -1,0 +1,176 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-colors/d2l-colors.html">
+<link rel="import" href="../d2l-icons/d2l-icon.html">
+<link rel="import" href="../d2l-icons/tier3-icons.html">
+
+<link rel="import" href="./src/d2l-profile-image-shared-styles.html">
+
+<!--
+`d2l-profile-image-base`
+D2L Profile Image
+@demo demo/index_base.html
+-->
+
+<dom-module id="d2l-profile-image-base">
+	<template strip-whitespace>
+
+		<style include="d2l-profile-image-shared-styles">
+				img {
+					width: 100%;
+					height: 100%;
+				}
+				.initials {
+					background-color: var(--initials-background-color);
+					color: var(--d2l-color-regolith);
+					width: 100%;
+					height: 100%;
+					text-align: center;
+					display : flex;
+					align-items : center;
+					justify-content: center;
+				}
+				.shady-person {
+					--d2l-icon-fill-color: var(--d2l-color-ferrite);
+				}
+				@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+					.shady-person{
+							width: 100%;
+							height: 100%;
+					}
+				}
+			</style>
+		</custom-style>
+		<template is="dom-if" if="[[_showShadyPerson(_displayType)]]">
+			<div class="shady-person">
+				<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
+			</div>
+		</template>
+
+		<template is="dom-if" if="[[_showInitials(_displayType)]]">
+			<div id="initials" class="initials">
+				[[_getInitials(firstName, lastName)]]
+			</div>
+		</template>
+
+		<template is="dom-if" if="[[_showAvatar(_displayType)]]">
+			<img draggable="false" src="[[imageUrl]]" onError="[[_failedToLoadImageFunc()]]">
+		</template>
+
+	</template>
+	<script>
+		Polymer({
+			is: 'd2l-profile-image-base',
+			properties: {
+				firstName: {
+					type: String,
+					value: ''
+				},
+				lastName: {
+					type: String,
+					value: ''
+				},
+				colourId: {
+					type: Number,
+					value: -1,
+					observer: '_handleColourId'
+				},
+				imageUrl: {
+					type: String,
+					value: '',
+					observer: '_resetImageState'
+				},
+				_displayType: {
+					type: String,
+					observer: '_handleColourId'
+				},
+				_failedToLoadImage: {
+					type: Boolean,
+					value: false
+				}
+			},
+			// WARNING
+			// Changing the order, as well as adding or removing a colour
+			// May result in background colours to change for a given colourId
+			// Only update if you have the correct approval
+			__backgroundColours: [
+				'#8B271F',
+				'#CF3A2F',
+				'#C74F05',
+				'#527F1F',
+				'#346633',
+				'#165F5B',
+				'#1F826B',
+				'#0C7683',
+				'#3155BF',
+				'#4476C1',
+				'#383773',
+				'#6F6BB8',
+				'#50305F',
+				'#9860AF',
+				'#804167',
+				'#AB578A',
+				'#8C2855',
+				'#D13B7F',
+				'#47565E',
+				'#5F727D',
+				'#3B4148',
+				'#59616C'
+			],
+			observers: [
+				'_setDisplayType(imageUrl, _failedToLoadImage, colourId, firstName)'
+			],
+			attached: function() {
+				this._handleColourId();
+			},
+			_handleColourId: function() {
+				var backgroundColour = this._getInitialedBackgroundColour(this.colourId);
+				this.updateStyles({'--initials-background-color': backgroundColour});
+			},
+			_setDisplayType: function(imageUrl, failedToLoadImage, colourId, firstName) {
+				if (imageUrl && !failedToLoadImage) {
+					this.set('_displayType', 'avatar');
+					return;
+				}
+				else if (typeof colourId !== 'undefined' &&
+						colourId !== null &&
+						colourId > 0 &&
+						firstName
+				) {
+					this.set('_displayType', 'initials');
+					return;
+				}
+				this.set('_displayType', 'shady');
+			},
+			_failedToLoadImageFunc: function() {
+				return function() {
+					this.set('_failedToLoadImage', true);
+				}.bind(this);
+			},
+			_getInitialedBackgroundColour: function(colourId) {
+				var idx = colourId % this.__backgroundColours.length;
+				return this.__backgroundColours[idx];
+			},
+			_getInitials: function(firstName, lastName) {
+				if (firstName && lastName) {
+					return firstName[0].toUpperCase() + lastName[0].toUpperCase();
+				}
+				else if (firstName) {
+					return firstName[0].toUpperCase();
+				}
+				return '';
+			},
+			_resetImageState: function() {
+				this.set('_failedToLoadImage', false);
+			},
+			_showAvatar: function(displayType) {
+				return displayType === 'avatar';
+			},
+			_showShadyPerson: function(displayType) {
+				return displayType === 'shady';
+			},
+			_showInitials: function(displayType) {
+				return displayType === 'initials';
+			}
+		});
+	</script>
+</dom-module>
