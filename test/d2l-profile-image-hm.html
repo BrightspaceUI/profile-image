@@ -106,6 +106,72 @@
 
 				});
 			});
+
+			[true, false].forEach(function(isDefaultImage) {
+				test('Correct image configured when default image is ' + isDefaultImage, function(done) {
+					var href = 'https://tenant.users.api.proddev.d2l/169';
+					var expectedImage = 'expectedImage.png';
+					var imageClass = isDefaultImage ? ['default-image'] : [];
+					var response = {
+						'entities': [
+							{
+								'class': [],
+								'rel': [
+									'https://api.brightspace.com/rels/first-name'
+								],
+								'properties': {
+									'name': 'firstName'
+								}
+							},
+							{
+								'class': [],
+								'rel': [
+									'https://api.brightspace.com/rels/last-name'
+								],
+								'properties': {
+									'name': 'lastName'
+								}
+							},
+							{
+								'rel': ['https://api.brightspace.com/rels/user-profile'],
+								'entities': [
+									{
+										'rel': ['https://api.brightspace.com/rels/profile-image'],
+										'class': imageClass,
+										'links': [
+											{
+												'rel': ['https://api.brightspace.com/rels/thumbnail#regular'],
+												'href': expectedImage
+											}
+										]
+									}
+								]
+							}
+						],
+						'links': [
+							{ 'rel': ['self'], 'href': href }
+						]
+					};
+					defaultElement._fetchEntity = sinon.stub();
+					defaultElement._fetchEntity
+						.withArgs(sinon.match(href))
+						.returns(Promise.resolve(window.D2L.Hypermedia.Siren.Parse(response)));
+
+					defaultElement.href = href;
+
+					defaultElement._fetchUserInformation()
+						.then(function() {
+							flush(function() {
+								assert.equal(defaultElement._imageUrl, isDefaultImage ? '' : expectedImage);
+
+								var profileImage = Polymer.dom(defaultElement.root).querySelector('#d2l-profile-image');
+								assert.equal(profileImage.imageUrl, isDefaultImage ? '' : expectedImage);
+
+								done();
+							});
+						}.bind(this));
+				});
+			});
 		});
 	</script>
 </body>
