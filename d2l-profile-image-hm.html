@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../d2l-fetch-siren-entity-behavior/d2l-fetch-siren-entity-behavior.html">
 
-<link rel="import" href="./d2l-profile-image.html">
+<link rel="import" href="./d2l-profile-image-base.html">
 
 <!--
 `d2l-profile-image-hm`
@@ -13,7 +13,7 @@ D2L Profile Image Hypermedia
 	<template strip-whitespace>
 			<style include="d2l-profile-image-shared-styles">
 			</style>
-			<d2l-profile-image
+			<d2l-profile-image-base
 				id="d2l-profile-image"
 				small$="[[small]]"
 				medium$="[[medium]]"
@@ -23,7 +23,7 @@ D2L Profile Image Hypermedia
 				last-name="[[_lastName]]"
 				colour-id="[[_colourId]]"
 				image-url="[[_imageUrl]]">
-			</d2l-profile-image>
+			</d2l-profile-image-base>
 	</template>
 	<script>
 		Polymer({

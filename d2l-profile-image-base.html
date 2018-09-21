@@ -6,12 +6,12 @@
 <link rel="import" href="./src/d2l-profile-image-shared-styles.html">
 
 <!--
-`d2l-profile-image`
+`d2l-profile-image-base`
 D2L Profile Image
 @demo demo/index.html
 -->
 
-<dom-module id="d2l-profile-image">
+<dom-module id="d2l-profile-image-base">
 	<template strip-whitespace>
 
 		<style include="d2l-profile-image-shared-styles">
@@ -59,7 +59,7 @@ D2L Profile Image
 	</template>
 	<script>
 		Polymer({
-			is: 'd2l-profile-image',
+			is: 'd2l-profile-image-base',
 			properties: {
 				firstName: {
 					type: String,

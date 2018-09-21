@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-		<title>d2l-profile-image demo</title>
+		<title>d2l-profile-image-base demo</title>
 		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 		<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
 		<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
 		<link rel="import" href="../../d2l-typography/d2l-typography.html">
-		<link rel="import" href="../d2l-profile-image.html">
+		<link rel="import" href="../d2l-profile-image-base.html">
 		<custom-style>
 			<style is="custom-style" include="demo-pages-shared-styles"></style>
 		</custom-style>
@@ -23,7 +23,7 @@
 	</head>
 	<body unresolved class="d2l-typography">
 		<div class="vertical-section-container centered">
-			<h3>d2l-profile-image</h3>
+			<h3>d2l-profile-image-base</h3>
 			<demo-snippet>
 				<template>
 					Specification for the design can be found at
@@ -50,19 +50,19 @@
 					</ul>
 					<hr/>
 
-					<d2l-profile-image></d2l-profile-image>
+					<d2l-profile-image-base></d2l-profile-image-base>
 					<br/>
 
-					<d2l-profile-image small></d2l-profile-image>
+					<d2l-profile-image-base small></d2l-profile-image-base>
 					<br/>
 
-					<d2l-profile-image medium></d2l-profile-image>
+					<d2l-profile-image-base medium></d2l-profile-image-base>
 					<br/>
 
-					<d2l-profile-image large></d2l-profile-image>
+					<d2l-profile-image-base large></d2l-profile-image-base>
 					<br/>
 
-					<d2l-profile-image x-large></d2l-profile-image>
+					<d2l-profile-image-base x-large></d2l-profile-image-base>
 				</template>
 			</demo-snippet>
 			<demo-snippet>
@@ -84,33 +84,33 @@
 					</ul>
 					<hr/>
 
-					<d2l-profile-image
+					<d2l-profile-image-base
 						first-name="first"
 						last-name="last"
 						small>
-					</d2l-profile-image>
+					</d2l-profile-image-base>
 					<br/>
 
-					<d2l-profile-image
+					<d2l-profile-image-base
 						last-name="last"
 						colour-id="2"
 						medium>
-					</d2l-profile-image>
+					</d2l-profile-image-base>
 					<br/>
 
-					<d2l-profile-image
+					<d2l-profile-image-base
 						first-name="first"
 						colour-id="3"
 						large>
-					</d2l-profile-image>
+					</d2l-profile-image-base>
 					<br/>
 
-					<d2l-profile-image
+					<d2l-profile-image-base
 						first-name="FIRST"
 						last-name="LAST"
 						colour-id="404"
 						x-large>
-					</d2l-profile-image>
+					</d2l-profile-image-base>
 				</template>
 			</demo-snippet>
 				<demo-snippet>
@@ -132,37 +132,37 @@
 						</ul>
 						<hr/>
 
-						<d2l-profile-image
+						<d2l-profile-image-base
 							colour-id="3"
 							image-url="./img/invalid.png"
 							small>
-						</d2l-profile-image>
+						</d2l-profile-image-base>
 						<br/>
 
-						<d2l-profile-image
+						<d2l-profile-image-base
 							first-name="first"
 							colour-id="6"
 							image-url="./img/invalid.png"
 							medium>
-						</d2l-profile-image>
+						</d2l-profile-image-base>
 						<br/>
 
-						<d2l-profile-image
+						<d2l-profile-image-base
 							first-name="first"
 							last-name="last"
 							colour-id="10"
 							image-url="./img/invalid.png"
 							large>
-						</d2l-profile-image>
+						</d2l-profile-image-base>
 						<br/>
 
-						<d2l-profile-image
+						<d2l-profile-image-base
 							first-name="first"
 							last-name="last"
 							colour-id="10"
 							image-url="./img/d2l-moose.png"
 							x-large>
-						</d2l-profile-image>
+						</d2l-profile-image-base>
 
 					</template>
 				</demo-snippet>
