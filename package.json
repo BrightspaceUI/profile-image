@@ -1,6 +1,6 @@
 {
-  "name": "d2l-profile-image",
-  "description": "D2L Profile Image",
+  "name": "d2l-users",
+  "description": "D2L Components Using Users Hypermedia API",
   "private": true,
   "scripts": {
     "postinstall": "polymer install --variants",
