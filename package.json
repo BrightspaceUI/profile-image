@@ -1,0 +1,17 @@
+{
+  "name": "d2l-users",
+  "description": "D2L Components Using Users Hypermedia API",
+  "private": true,
+  "scripts": {
+    "postinstall": "polymer install --variants"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrightspaceUI/profile-image.git"
+  },
+  "author": "D2L Corporation",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "polymer-cli": "^1.7.4"
+  }
+}

@@ -3,6 +3,7 @@ node_js: node
 addons:
   chrome: stable
 before_install:
+- npm install
 - cd profile-image
 - npm install
 script:
