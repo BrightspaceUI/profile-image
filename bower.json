@@ -1,7 +1,7 @@
 {
-  "name": "d2l-profile-image",
-  "description": "D2L Profile Image",
-  "main": "d2l-profile-image.html",
+  "name": "d2l-users",
+  "description": "D2L Components Using Users Hypermedia API",
+  "main": "d2l-users.html",
   "license": "Apache-2.0",
   "ignore": [
     "demo",
