@@ -80,12 +80,14 @@
 				});
 
 				[
-					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'avatar' },
-					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: true, displayType: 'initials' },
-					{ imageUrl: 'validUrl', colourId: 1, firstName: '', failedToLoadImage: true, displayType: 'shady' },
-					{ imageUrl: '', colourId: 1, firstName: 'first', failedToLoadImage: false, displayType: 'initials' },
-					{ imageUrl: '', colourId: -1, firstName: 'first', failedToLoadImage: false, displayType: 'shady' },
-					{ imageUrl: '', colourId: 1, firstName: '', failedToLoadImage: false, displayType: 'shady' }
+					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: false, initialized: true, displayType: 'avatar' },
+					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: true, initialized: true, displayType: 'initials' },
+					{ imageUrl: 'validUrl', colourId: 1, firstName: '', failedToLoadImage: true, initialized: true, displayType: 'shady' },
+					{ imageUrl: '', colourId: 1, firstName: 'first', failedToLoadImage: false, initialized: true, displayType: 'initials' },
+					{ imageUrl: '', colourId: -1, firstName: 'first', failedToLoadImage: false, initialized: true, displayType: 'shady' },
+					{ imageUrl: '', colourId: 1, firstName: '', failedToLoadImage: false, initialized: true, displayType: 'shady' },
+					{ imageUrl: 'validUrl', colourId: 1, firstName: 'first', failedToLoadImage: false, initialized: false, displayType: 'placeholder' },
+					{ imageUrl: '', colourId: 1, firstName: '', failedToLoadImage: false, initialized: false, displayType: 'placeholder' }
 				].forEach(function(t) {
 					test('_displayType is "' + t.displayType + '" when '
 						+ 'imageUrl is "' + t.imageUrl + '" and '
@@ -96,6 +98,7 @@
 						defaultElement.set('imageUrl', t.imageUrl);
 						defaultElement.set('colourId', t.colourId);
 						defaultElement.set('firstName', t.firstName);
+						defaultElement.set('initialized', t.initialized);
 						defaultElement.set('_failedToLoadImage', t.failedToLoadImage);
 						Polymer.dom.flush();
 						assert.equal(defaultElement._displayType, t.displayType);
@@ -103,9 +106,10 @@
 				});
 
 				[
-					{ displayType: 'avatar', showAvatar: true, showInitials: false, showShady: false },
-					{ displayType: 'initials', showAvatar: false, showInitials: true, showShady: false },
-					{ displayType: 'shady', showAvatar: false, showInitials: false, showShady: true },
+					{ displayType: 'avatar', showAvatar: true, showInitials: false, showShady: false, showPlaceholder: false },
+					{ displayType: 'initials', showAvatar: false, showInitials: true, showShady: false, showPlaceholder: false },
+					{ displayType: 'shady', showAvatar: false, showInitials: false, showShady: true, showPlaceholder: false },
+					{ displayType: 'placeholder', showAvatar: false, showInitials: false, showShady: false, showPlaceholder: true }
 				].forEach(function(t) {
 					test('_showAvatar(' + t.displayType + ') should return ' + t.showAvatar, function() {
 						var showAvatar = defaultElement._showAvatar(t.displayType);
@@ -118,6 +122,10 @@
 					test('_showShadyPerson(' + t.displayType + ') should return ' + t.showShady, function() {
 						var showShady = defaultElement._showShadyPerson(t.displayType);
 						assert.equal(showShady, t.showShady);
+					});
+					test('_showPlaceholder(' + t.displayType + ') should return ' + t.showPlaceholder, function() {
+						var showPlaceholder = defaultElement._showPlaceholder(t.displayType);
+						assert.equal(showPlaceholder, t.showPlaceholder);
 					});
 				});
 
