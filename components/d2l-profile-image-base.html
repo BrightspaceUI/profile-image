@@ -32,9 +32,6 @@ D2L Profile Image
 				.shady-person {
 					--d2l-icon-fill-color: var(--d2l-color-ferrite);
 				}
-				.placeholder {
-					background-color: transparent;
-				}
 				@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 					.shady-person{
 							width: 100%;
@@ -43,11 +40,6 @@ D2L Profile Image
 				}
 			</style>
 		</custom-style>
-		<template is="dom-if" if="[[_showPlaceholder(_displayType)]]">
-			<div class="placeholder">
-			</div>
-		</template>
-
 		<template is="dom-if" if="[[_showShadyPerson(_displayType)]]">
 			<div class="shady-person">
 				<d2l-icon icon="d2l-tier3:profile-pic"></d2l-icon>
@@ -87,10 +79,6 @@ D2L Profile Image
 					value: '',
 					observer: '_resetImageState'
 				},
-				initialized: {
-					type: Boolean,
-					value: true
-				},
 				_displayType: {
 					type: String,
 					observer: '_handleColourId'
@@ -129,7 +117,7 @@ D2L Profile Image
 				'#59616C'
 			],
 			observers: [
-				'_setDisplayType(initialized, imageUrl, _failedToLoadImage, colourId, firstName)'
+				'_setDisplayType(imageUrl, _failedToLoadImage, colourId, firstName)'
 			],
 			attached: function() {
 				this._handleColourId();
@@ -138,11 +126,7 @@ D2L Profile Image
 				var backgroundColour = this._getInitialedBackgroundColour(this.colourId);
 				this.updateStyles({'--initials-background-color': backgroundColour});
 			},
-			_setDisplayType: function(initialized, imageUrl, failedToLoadImage, colourId, firstName) {
-				if( !initialized ) {
-					this.set('_displayType', 'placeholder');
-					return;
-				}
+			_setDisplayType: function(imageUrl, failedToLoadImage, colourId, firstName) {
 				if (imageUrl && !failedToLoadImage) {
 					this.set('_displayType', 'avatar');
 					return;
@@ -183,9 +167,6 @@ D2L Profile Image
 			},
 			_showShadyPerson: function(displayType) {
 				return displayType === 'shady';
-			},
-			_showPlaceholder: function(displayType) {
-				return displayType === 'placeholder';
 			},
 			_showInitials: function(displayType) {
 				return displayType === 'initials';

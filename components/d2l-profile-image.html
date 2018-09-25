@@ -26,7 +26,7 @@ D2L Profile Image Hypermedia
 				last-name="[[_lastName]]"
 				colour-id="[[_colourId]]"
 				image-url="[[_imageUrl]]"
-				initialized="[[_initialized]]">
+				loading$="[[_loading]]">
 			</d2l-profile-image-base>
 	</template>
 	<script>
@@ -65,9 +65,9 @@ D2L Profile Image Hypermedia
 					type: String,
 					value: ''
 				},
-				_initialized: {
+				_loading: {
 					type: Boolean,
-					value: false
+					value: true
 				}
 			},
 			behaviors: [
@@ -76,7 +76,7 @@ D2L Profile Image Hypermedia
 			_configureProfileImage: function() {
 				this._fetchUserInformation()
 					.then(function() {
-						this.set('_initialized', true);
+						this.set('_loading', false);
 					}.bind(this));
 			},
 			_fetchUserInformation: function() {

@@ -22,7 +22,7 @@
 		</template>
 	</test-fixture>
 	<script>
-		suite('d2l-profile-image-base', function() {
+		suite('d2l-profile-image', function() {
 
 			var sizes = ['small', 'medium', 'large', 'x-large'];
 			var defaultElement;
@@ -42,6 +42,29 @@
 						assert.equal(profileImage.hasAttribute(size), expectedSize === size);
 					});
 				});
+			});
+
+			test('When user information not yet fetch, base component marked as loading', function() {
+				var profileImage = Polymer.dom(defaultElement.root).querySelector('#d2l-profile-image');
+				assert.equal(profileImage.hasAttribute('loading'), true);
+			});
+
+			test('When user information fetched, base component not marked as loading', function(done) {
+				var href = 'someLink';
+				defaultElement._fetchEntity = sinon.stub();
+				defaultElement._fetchEntity
+					.withArgs(sinon.match(href))
+					.returns(Promise.resolve(window.D2L.Hypermedia.Siren.Parse({})));
+				defaultElement.href = href;
+
+				defaultElement._fetchUserInformation()
+					.then(function() {
+						flush(function() {
+							var profileImage = Polymer.dom(defaultElement.root).querySelector('#d2l-profile-image');
+							assert.equal(profileImage.hasAttribute('loading'), false);
+							done();
+						});
+					}.bind(this));
 			});
 
 			[
