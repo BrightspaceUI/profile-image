@@ -9,8 +9,13 @@
 				overflow: hidden;
 			}
 
+			:host([loading]) {
+				opacity: 0;
+			}
+
 			:host([small]) {
 				display: inline-block;
+				min-width: 30px;
 				width: 30px;
 				height: 30px;
 				--d2l-icon-height: 100%;
@@ -22,6 +27,7 @@
 
 			:host([medium]) {
 				display: inline-block;
+				min-width: 42px;
 				width: 42px;
 				height: 42px;
 				--d2l-icon-height: 100%;
@@ -33,6 +39,7 @@
 
 			:host([large]) {
 				display: inline-block;
+				min-width: 60px;
 				width: 60px;
 				height: 60px;
 				--d2l-icon-height: 100%;
@@ -44,6 +51,7 @@
 
 			:host([x-large]) {
 				display: inline-block;
+				min-width: 84px;
 				width: 84px;
 				height: 84px;
 				--d2l-icon-height: 100%;

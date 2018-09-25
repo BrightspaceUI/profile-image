@@ -25,7 +25,8 @@ D2L Profile Image Hypermedia
 				first-name="[[_firstName]]"
 				last-name="[[_lastName]]"
 				colour-id="[[_colourId]]"
-				image-url="[[_imageUrl]]">
+				image-url="[[_imageUrl]]"
+				loading$="[[_loading]]">
 			</d2l-profile-image-base>
 	</template>
 	<script>
@@ -63,13 +64,20 @@ D2L Profile Image Hypermedia
 				_imageUrl: {
 					type: String,
 					value: ''
+				},
+				_loading: {
+					type: Boolean,
+					value: true
 				}
 			},
 			behaviors: [
 				D2L.PolymerBehaviors.FetchSirenEntityBehavior
 			],
 			_configureProfileImage: function() {
-				this._fetchUserInformation();
+				this._fetchUserInformation()
+					.then(function() {
+						this.set('_loading', false);
+					}.bind(this));
 			},
 			_fetchUserInformation: function() {
 				return this._fetchEntity(this.href)
